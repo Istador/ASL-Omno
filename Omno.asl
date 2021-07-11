@@ -23,7 +23,6 @@ update {
   // Detect paused game
   var running = current.running != 1;
   if (vars.running != running) {
-    print("[RCL] debug " + current.running);
     vars.running = running;
     if (running) { print("[RCL] game running"); }
     else { print("[RCL] game paused"); }
