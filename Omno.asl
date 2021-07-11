@@ -9,15 +9,27 @@
  * Credits        58
  */
 state ("Omno-Win64-Shipping", "Beta") {
-  uint level : "Omno-Win64-Shipping.exe", 0x043DA828, 0x8, 0xD80, 0x2F0, 0xC5C; // 0x046BFC7C
+  uint level   : "Omno-Win64-Shipping.exe", 0x043DA828, 0x8, 0xD80, 0x2F0, 0xC5C; // 0x046BFC7C
+  byte running : "Omno-Win64-Shipping.exe", 0x0454EC00, 0x8A8;
 }
 
 init {
-  vars.level = current.level;
+  vars.level   = current.level;
+  vars.running = false;
   print("[RCL] level " + current.level);
 }
 
 update {
+  // Detect paused game
+  var running = current.running != 1;
+  if (vars.running != running) {
+    print("[RCL] debug " + current.running);
+    vars.running = running;
+    if (running) { print("[RCL] game running"); }
+    else { print("[RCL] game paused"); }
+  }
+
+  // Detect level change
   if (old.level != current.level) {
     print("[RCL] level " + current.level);
     // make sure that the main menu is always detected
@@ -30,8 +42,11 @@ update {
 
 // pause the clock
 isLoading {
-  // TODO: reliably detect the in-game pause menu
-  return (current.level == 8 || current.level == 0);
+  return (
+    (current.level == 8 || current.level == 0)
+    ||
+    (! vars.running)
+  );
 }
 
 reset {
