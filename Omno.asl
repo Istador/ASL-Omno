@@ -13,7 +13,8 @@ state ("Omno-Win64-Shipping", "Beta") {
 }
 
 init {
-  vars.level = 0;
+  vars.level = current.level;
+  print("[RCL] level " + current.level);
 }
 
 update {
