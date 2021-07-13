@@ -10,7 +10,7 @@
  */
 state ("Omno-Win64-Shipping", "Beta") {
   uint level   : "Omno-Win64-Shipping.exe", 0x043DA828, 0x8, 0xD80, 0x2F0, 0xC5C; // 0x046BFC7C
-  byte running : "Omno-Win64-Shipping.exe", 0x0454EC00, 0x8A8;
+  byte running : "Omno-Win64-Shipping.exe", 0x044196C0, 0x28, 0x210, 0xB8, 0x8A8;
 }
 
 init {
