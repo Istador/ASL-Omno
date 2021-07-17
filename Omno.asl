@@ -15,8 +15,25 @@ state ("Omno-Win64-Shipping", "Beta") {
 }
 
 startup {
-  settings.Add("split_chapters", true, "Split chapters");
-  settings.SetToolTip("split_chapters", "Otherwise it will only split once before the final cutscene.");
+
+  settings.Add("split_chapters", true, "Split between chapters");
+  settings.SetToolTip("split_chapters", "Otherwise it will only split once at the end.");
+
+  settings.CurrentDefaultParent = "split_chapters";
+  settings.Add("split_chapter1", true, "Chapter 1 - The Light");
+  settings.Add("split_chapter2", true, "Chapter 2 - The Teaching");
+  settings.Add("split_chapter3", true, "Chapter 3 - The Rift");
+  settings.Add("split_chapter4", true, "Chapter 4 - The Gate");
+  settings.Add("split_chapter5", true, "Chapter 5 - The Pilgrimage");
+  settings.SetToolTip("split_chapter1", "Split between chapter 1 and 2.");
+  settings.SetToolTip("split_chapter2", "Split between chapter 2 and 3.");
+  settings.SetToolTip("split_chapter3", "Split between chapter 3 and 4.");
+  settings.SetToolTip("split_chapter4", "Split between chapter 4 and 5.");
+  settings.SetToolTip("split_chapter5", "Split at the end of chapter 5. If \"Split before Credits\" is disabled it splits regardless.");
+  settings.CurrentDefaultParent = null;
+
+  settings.Add("split_credits", false, "Split before Credits");
+  settings.SetToolTip("split_credits", "Use this, if you want to include the final cutscene into the time.");
 }
 
 init {
@@ -45,10 +62,13 @@ init {
       case 554: case 568: case 614:
         return 5;
 
-      // End & Credits
+      // Final Cutscene
       case  2:
-      case 58:
         return 6;
+
+      // Credits
+      case 58:
+        return (settings["split_credits"] ? 7 : 6);
     }
     return -1;
   });
@@ -57,6 +77,7 @@ init {
   vars.level   = -1;
   vars.stable  = false;
   vars.chapter = vars.GetChapter(current.level);
+  vars.last_chapter = (settings["split_credits"] ? 7 : 6);
 
   print("[RCL] lvl " + current.level);
   print("[RCL] ch " + vars.chapter);
@@ -125,7 +146,13 @@ split {
     vars.level = current.level;
     vars.chapter++;
     print("[RCL] ch " + vars.chapter);
-    return (vars.chapter == 6 || settings["split_chapters"]);
+    return (vars.chapter == vars.last_chapter || (settings["split_chapters"] && (
+         (vars.chapter == 2 && settings["split_chapter1"])
+      || (vars.chapter == 3 && settings["split_chapter2"])
+      || (vars.chapter == 4 && settings["split_chapter3"])
+      || (vars.chapter == 5 && settings["split_chapter4"])
+      || (vars.chapter == 6 && settings["split_chapter5"])
+    )));
   }
   return false;
 }
