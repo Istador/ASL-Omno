@@ -10,12 +10,12 @@
  * TimeTrial      20
  */
 state ("Omno-Win64-Shipping", "Beta") {
-  uint level   : "Omno-Win64-Shipping.exe", 0x043DA828, 0x8, 0xD80, 0x2F0, 0xC5C; // 0x046BFC7C
+  uint level  : "Omno-Win64-Shipping.exe", 0x043DA828, 0x8, 0xD80, 0x2F0, 0xC5C; // 0x046BFC7C
   byte paused : "Omno-Win64-Shipping.exe", 0x044196C0, 0x28, 0x210, 0xB8, 0x8A8;
 }
 
-startup {
 
+startup {
   settings.Add("split_chapters", true, "Split between chapters");
   settings.SetToolTip("split_chapters", "Otherwise it will only split once at the end.");
 
@@ -35,6 +35,7 @@ startup {
   settings.Add("split_credits", false, "Split before Credits");
   settings.SetToolTip("split_credits", "Use this, if you want to include the final cutscene into the time.");
 }
+
 
 init {
   vars.GetChapter = (Func<uint,int>) ((level) => {
@@ -73,14 +74,14 @@ init {
     return -1;
   });
 
-  vars.paused  = true;
-  vars.level   = -1;
-  vars.stable  = false;
-  vars.chapter = vars.GetChapter(current.level);
+  vars.paused       = true;
+  vars.level        = -1;
+  vars.stable       = false;
+  vars.chapter      = vars.GetChapter(current.level);
   vars.last_chapter = (settings["split_credits"] ? 7 : 6);
 
   print("[RCL] lvl " + current.level);
-  print("[RCL] ch " + vars.chapter);
+  print("[RCL] ch "  + vars.chapter);
 }
 
 
