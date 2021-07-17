@@ -55,6 +55,7 @@ init {
 
   vars.paused  = true;
   vars.level   = -1;
+  vars.stable  = false;
   vars.chapter = vars.GetChapter(current.level);
 
   print("[RCL] lvl " + current.level);
@@ -72,7 +73,8 @@ update {
   }
 
   // Detect level change
-  if (old.level != current.level) {
+  vars.stable = old.level == current.level;
+  if (! vars.stable) {
     print("[RCL] lvl " + current.level);
   }
   // make sure that the main menu is always detected
@@ -96,7 +98,7 @@ isLoading {
 reset {
   // Going from the Main Menu to the first area resets the timer
   // Consequence: Continue during the first chapter will not work
-  if (vars.level == 8 && current.level == 130) {
+  if (vars.stable && vars.level == 8 && current.level == 130) {
     print("[RCL] <reset>");
     return true;
   }
@@ -106,7 +108,7 @@ reset {
 
 // Start the run
 start {
-  if (vars.level == 8 && current.level == 130) {
+  if (vars.stable && vars.level == 8 && current.level == 130) {
     print("[RCL] <start>");
     vars.level   = current.level;
     vars.chapter = 1;
@@ -119,7 +121,7 @@ start {
 // Progress the Chapter
 split {
   var chapter = vars.GetChapter(current.level);
-  if (vars.chapter < chapter) {
+  if (vars.stable && vars.chapter < chapter) {
     vars.level = current.level;
     vars.chapter++;
     print("[RCL] ch " + vars.chapter);
