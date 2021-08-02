@@ -10,7 +10,7 @@
  * TimeTrial      20
  */
 state ("Omno-Win64-Shipping", "Release") {
-  uint level  : "Omno-Win64-Shipping.exe", 0x043DA828, 0x8, 0xD80, 0x2F0, 0xC5C; // 0x046BFC7C
+  uint level  : "Omno-Win64-Shipping.exe", 0x04549A40, 0x20, 0x78, 0x308, 0x46C; // 0x046BFC7C
   byte paused : "Omno-Win64-Shipping.exe", 0x044196C0, 0x28, 0x210, 0xB8, 0x8A8;
 }
 
