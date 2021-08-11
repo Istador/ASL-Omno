@@ -120,7 +120,8 @@ isLoading {
 reset {
   // Going from the Main Menu to the first area resets the timer
   // Consequence: Continue during the first chapter will not work
-  if ( vars.stable
+  if ( settings.ResetEnabled
+    && vars.stable
     && vars.level    == 8
     && current.level == 130
   ) {
@@ -137,7 +138,9 @@ start {
     && vars.level    == 8
     && current.level == 130
   ) {
-    print("[RCL] <start>");
+    if (settings.StartEnabled) {
+      print("[RCL] <start>");
+    }
     vars.level   = current.level;
     vars.chapter = 1;
     print("[RCL] ch 1");
