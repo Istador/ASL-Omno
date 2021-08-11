@@ -38,7 +38,7 @@ startup {
 
 
 init {
-  vars.GetChapter = (Func<uint,int>) ((level) => {
+  vars.GetChapter = (Func<uint, int>) ((level) => {
     switch (level) {
       // Chapter 1: The Light (Jump)
       case 130:
@@ -120,7 +120,10 @@ isLoading {
 reset {
   // Going from the Main Menu to the first area resets the timer
   // Consequence: Continue during the first chapter will not work
-  if (vars.stable && vars.level == 8 && current.level == 130) {
+  if ( vars.stable
+    && vars.level    == 8
+    && current.level == 130
+  ) {
     print("[RCL] <reset>");
     return true;
   }
@@ -130,7 +133,10 @@ reset {
 
 // Start the run
 start {
-  if (vars.stable && vars.level == 8 && current.level == 130) {
+  if ( vars.stable
+    && vars.level    == 8
+    && current.level == 130
+  ) {
     print("[RCL] <start>");
     vars.level   = current.level;
     vars.chapter = 1;
@@ -139,6 +145,7 @@ start {
   }
   return false;
 }
+
 
 // Progress the Chapter
 split {
