@@ -34,6 +34,16 @@ startup {
 
   settings.Add("split_credits", false, "Split before Credits");
   settings.SetToolTip("split_credits", "Use this, if you want to include the final cutscene into the time.");
+
+  settings.Add("pause", true, "Pause the timer");
+  settings.SetToolTip("pause", "Remember that you can also disable this by tracking real time instead of game time.");
+  settings.CurrentDefaultParent = "pause";
+  settings.Add("pause_main_menu", true, "in the main menu");
+  settings.Add("pause_paused", true, "while the game is paused");
+  settings.SetToolTip("pause_paused", "The game is paused when you loose the controller connection or when you go to the pause menu.");
+  settings.Add("pause_loading", false, "while the game is loading [experimental]");
+  settings.SetToolTip("pause_loading", "Currently this pauses the timer when this script doesn't recognize a level (this usually happens briefly during loading screens). It's likely that this will be broken by future game patches, resulting in the timer being paused during the game!");
+  settings.CurrentDefaultParent = null;
 }
 
 
@@ -74,6 +84,14 @@ init {
     return -1;
   });
 
+  vars.KnownLevel = (Func<uint, bool>) ((level) => {
+    return (
+         (vars.GetChapter(level) != -1)
+      || (level == 8)
+      || (level == 20)
+    );
+  });
+
   vars.paused       = true;
   vars.level        = -1;
   vars.stable       = false;
@@ -110,9 +128,12 @@ update {
 // pause the clock
 isLoading {
   return (
-    (current.level == 8) // main menu
-    ||
-    vars.paused
+    settings["pause"]
+    && ( (vars.chapter >= vars.last_chapter)
+      || (settings["pause_main_menu"] && current.level == 8)
+      || (settings["pause_paused"]    && vars.paused)
+      || (settings["pause_loading"]   && ! vars.KnownLevel(current.level))
+    )
   );
 }
 
